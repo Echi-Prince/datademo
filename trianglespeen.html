@@ -2,36 +2,53 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Spinning Triangle</title>
+  <title>3D Spinning Pyramid</title>
   <style>
     body {
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background: #111;
+      background: #0a0a0a;
+      perspective: 1000px; /* depth for 3D */
     }
 
-    .triangle {
+    .scene {
+      width: 200px;
+      height: 200px;
+      position: relative;
+      transform-style: preserve-3d;
+      animation: spin 6s linear infinite;
+    }
+
+    .face {
+      position: absolute;
       width: 0;
       height: 0;
-      border-left: 60px solid transparent;
-      border-right: 60px solid transparent;
-      border-bottom: 100px solid #00ffcc;
-      animation: spin 3s linear infinite;
+      border-left: 100px solid transparent;
+      border-right: 100px solid transparent;
+      border-bottom: 180px solid #00ffcc;
+      opacity: 0.9;
     }
 
+    /* Position each triangular face */
+    .front  { transform: rotateY(0deg) translateZ(100px) rotateX(60deg); }
+    .right  { transform: rotateY(90deg) translateZ(100px) rotateX(60deg); }
+    .back   { transform: rotateY(180deg) translateZ(100px) rotateX(60deg); }
+    .left   { transform: rotateY(-90deg) translateZ(100px) rotateX(60deg); }
+
     @keyframes spin {
-      from {
-        transform: rotate(0deg);
-      }
-      to {
-        transform: rotate(360deg);
-      }
+      from { transform: rotateY(0deg) rotateX(-10deg); }
+      to   { transform: rotateY(360deg) rotateX(-10deg); }
     }
   </style>
 </head>
 <body>
-  <div class="triangle"></div>
+  <div class="scene">
+    <div class="face front"></div>
+    <div class="face right"></div>
+    <div class="face back"></div>
+    <div class="face left"></div>
+  </div>
 </body>
 </html>
