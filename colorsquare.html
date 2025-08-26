@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Color Spotting Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      background: #111;
+      color: #fff;
+      height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      margin-bottom: 10px;
+    }
+    #stats {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    #grid {
+      display: grid;
+      gap: 5px;
+      margin-bottom: 20px;
+    }
+    .square {
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    #game-over {
+      display: none;
+      text-align: center;
+    }
+    button {
+      padding: 8px 16px;
+      font-size: 16px;
+      margin-top: 10px;
+      cursor: pointer;
+      border: none;
+      border-radius: 6px;
+      background: #00cc88;
+      color: white;
+    }
+    button:hover {
+      background: #009966;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎨 Spot the Different Color 🎨</h1>
+  <div id="stats">
+    <div>⏱ Time: <span id="timer">0</span>s</div>
+    <div>🏆 High Score: <span id="highscore">0</span></div>
+  </div>
+  <div id="grid"></div>
+  
+  <div id="game-over">
+    <h2>Game Over!</h2>
+    <p>Your time: <span id="final-time"></span>s</p>
+    <button onclick="restartGame()">Restart</button>
+  </div>
+
+  <script>
+    const grid = document.getElementById("grid");
+    const timerDisplay = document.getElementById("timer");
+    const finalTimeDisplay = document.getElementById("final-time");
+    const gameOverScreen = document.getElementById("game-over");
+    const highScoreDisplay = document.getElementById("highscore");
+
+    let size = 2;              // starting grid size (2x2)
+    let colorDiff = 80;        // starting color difference
+    let timer = 0;
+    let interval;
+    let highScore = 0;
+
+    function startGame() {
+      timer = 0;
+      size = 2;
+      colorDiff = 80;
+      timerDisplay.textContent = timer;
+      gameOverScreen.style.display = "none";
+      generateGrid();
+      interval = setInterval(() => {
+        timer++;
+        timerDisplay.textContent = timer;
+      }, 1000);
+    }
+
+    function generateGrid() {
+      grid.innerHTML = "";
+      grid.style.gridTemplateColumns = `repeat(${size}, 60px)`;
+      grid.style.gridTemplateRows = `repeat(${size}, 60px)`;
+
+      // pick a random base color
+      const r = Math.floor(Math.random() * 200);
+      const g = Math.floor(Math.random() * 200);
+      const b = Math.floor(Math.random() * 200);
+
+      const baseColor = `rgb(${r},${g},${b})`;
+      const oddColor = `rgb(${r + colorDiff},${g + colorDiff},${b + colorDiff})`;
+
+      const oddIndex = Math.floor(Math.random() * size * size);
+
+      for (let i = 0; i < size * size; i++) {
+        const square = document.createElement("div");
+        square.classList.add("square");
+        square.style.width = "60px";
+        square.style.height = "60px";
+        square.style.backgroundColor = i === oddIndex ? oddColor : baseColor;
+
+        square.onclick = () => {
+          if (i === oddIndex) {
+            // Correct pick → increase difficulty
+            if (size < 8) size++; // increase grid size up to 8x8
+            if (colorDiff > 10) colorDiff -= 5; // make colors closer
+            generateGrid();
+          } else {
+            // Wrong pick → game over
+            gameOver();
+          }
+        };
+
+        grid.appendChild(square);
+      }
+    }
+
+    function gameOver() {
+      clearInterval(interval);
+      finalTimeDisplay.textContent = timer;
+      gameOverScreen.style.display = "block";
+
+      if (timer > highScore) {
+        highScore = timer;
+        highScoreDisplay.textContent = highScore;
+      }
+      grid.innerHTML = "";
+    }
+
+    function restartGame() {
+      startGame();
+    }
+
+    // Start automatically on load
+    startGame();
+  </script>
+</body>
+</html>
