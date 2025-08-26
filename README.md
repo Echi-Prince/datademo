@@ -1,2 +1,29 @@
 # datademo
 apparently this william edward hahn professor character has one of these already
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My First Website</title>
+</head>
+<body>
+  <h1>Welcome to My Demo Website</h1>
+  <p>This is a paragraph of text. Websites are built with HTML, which tells the browser what to show.</p>
+  
+  <h2>Here’s a list of things I like:</h2>
+  <ul>
+    <li>Learning new things</li>
+    <li>Coding</li>
+    <li>Pizza 🍕</li>
+  </ul>
+
+  <h2>Click a link:</h2>
+  <p>
+    <a href="https://www.wikipedia.org" target="_blank">Go to Wikipedia</a>
+  </p>
+
+  <h2>Here’s an image:</h2>
+  <img src="https://placekitten.com/300/200" alt="A cute kitten">
+
+</body>
+</html>
