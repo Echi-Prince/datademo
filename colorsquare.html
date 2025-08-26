@@ -55,41 +55,36 @@
 <body>
   <h1>🎨 Spot the Different Color 🎨</h1>
   <div id="stats">
-    <div>⏱ Time: <span id="timer">0</span>s</div>
+    <div>✅ Score: <span id="score">0</span></div>
     <div>🏆 High Score: <span id="highscore">0</span></div>
   </div>
   <div id="grid"></div>
   
   <div id="game-over">
     <h2>Game Over!</h2>
-    <p>Your time: <span id="final-time"></span>s</p>
+    <p>Your score: <span id="final-score"></span></p>
     <button onclick="restartGame()">Restart</button>
   </div>
 
   <script>
     const grid = document.getElementById("grid");
-    const timerDisplay = document.getElementById("timer");
-    const finalTimeDisplay = document.getElementById("final-time");
+    const scoreDisplay = document.getElementById("score");
+    const finalScoreDisplay = document.getElementById("final-score");
     const gameOverScreen = document.getElementById("game-over");
     const highScoreDisplay = document.getElementById("highscore");
 
     let size = 2;              // starting grid size (2x2)
     let colorDiff = 80;        // starting color difference
-    let timer = 0;
-    let interval;
+    let score = 0;
     let highScore = 0;
 
     function startGame() {
-      timer = 0;
+      score = 0;
       size = 2;
       colorDiff = 80;
-      timerDisplay.textContent = timer;
+      scoreDisplay.textContent = score;
       gameOverScreen.style.display = "none";
       generateGrid();
-      interval = setInterval(() => {
-        timer++;
-        timerDisplay.textContent = timer;
-      }, 1000);
     }
 
     function generateGrid() {
@@ -117,6 +112,8 @@
         square.onclick = () => {
           if (i === oddIndex) {
             // Correct pick → increase difficulty
+            score++;
+            scoreDisplay.textContent = score;
             if (size < 8) size++; // increase grid size up to 8x8
             if (colorDiff > 10) colorDiff -= 5; // make colors closer
             generateGrid();
@@ -131,12 +128,11 @@
     }
 
     function gameOver() {
-      clearInterval(interval);
-      finalTimeDisplay.textContent = timer;
+      finalScoreDisplay.textContent = score;
       gameOverScreen.style.display = "block";
 
-      if (timer > highScore) {
-        highScore = timer;
+      if (score > highScore) {
+        highScore = score;
         highScoreDisplay.textContent = highScore;
       }
       grid.innerHTML = "";
