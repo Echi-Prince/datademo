@@ -65,6 +65,7 @@
   <div id="stats">
     <div>✅ Score: <span id="score">0</span></div>
     <div>🏆 High Score: <span id="highscore">0</span></div>
+    <div>⏱ Time: <span id="timer">30</span>s</div>
   </div>
   <div id="grid"></div>
   
@@ -84,22 +85,35 @@
     const finalScoreDisplay = document.getElementById("final-score");
     const gameOverScreen = document.getElementById("game-over");
     const highScoreDisplay = document.getElementById("highscore");
+    const timerDisplay = document.getElementById("timer");
 
     const soundCorrect = document.getElementById("sound-correct");
     const soundWrong = document.getElementById("sound-wrong");
 
-    let size = 2;              // starting grid size (2x2)
-    let colorDiff = 80;        // starting color difference
-    let score = 0;
-    let highScore = 0;
+    let size, colorDiff, score, highScore, timeLeft, timerInterval;
 
     function startGame() {
-      score = 0;
       size = 2;
       colorDiff = 80;
+      score = 0;
+      timeLeft = 30;
       scoreDisplay.textContent = score;
+      timerDisplay.textContent = timeLeft;
       gameOverScreen.style.display = "none";
       generateGrid();
+      startTimer();
+    }
+
+    function startTimer() {
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        timerDisplay.textContent = timeLeft;
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          gameOver();
+        }
+      }, 1000);
     }
 
     function generateGrid() {
@@ -124,16 +138,18 @@
 
         square.onclick = () => {
           if (i === oddIndex) {
-            // Correct pick → play funny "boing"
+            // Correct pick → sound + score + time
             soundCorrect.currentTime = 0;
             soundCorrect.play();
             score++;
             scoreDisplay.textContent = score;
-            if (size < 8) size++; // increase grid size up to 8x8
-            if (colorDiff > 10) colorDiff -= 5; // make colors closer
+            timeLeft += 10; // add 10 seconds
+            timerDisplay.textContent = timeLeft;
+            if (size < 8) size++;
+            if (colorDiff > 10) colorDiff -= 5;
             generateGrid();
           } else {
-            // Wrong pick → play vine boom
+            // Wrong pick → sound + game over
             soundWrong.currentTime = 0;
             soundWrong.play();
             gameOver();
@@ -145,10 +161,11 @@
     }
 
     function gameOver() {
+      clearInterval(timerInterval);
       finalScoreDisplay.textContent = score;
       gameOverScreen.style.display = "block";
 
-      if (score > highScore) {
+      if (score > (highScore || 0)) {
         highScore = score;
         highScoreDisplay.textContent = highScore;
       }
