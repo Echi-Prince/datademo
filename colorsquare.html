@@ -74,12 +74,19 @@
     <button onclick="restartGame()">Restart</button>
   </div>
 
+  <!-- silly sounds -->
+  <audio id="sound-correct" src="https://www.myinstants.com/media/sounds/cartoon-boing.mp3"></audio>
+  <audio id="sound-wrong" src="https://www.myinstants.com/media/sounds/vine-boom.mp3"></audio>
+
   <script>
     const grid = document.getElementById("grid");
     const scoreDisplay = document.getElementById("score");
     const finalScoreDisplay = document.getElementById("final-score");
     const gameOverScreen = document.getElementById("game-over");
     const highScoreDisplay = document.getElementById("highscore");
+
+    const soundCorrect = document.getElementById("sound-correct");
+    const soundWrong = document.getElementById("sound-wrong");
 
     let size = 2;              // starting grid size (2x2)
     let colorDiff = 80;        // starting color difference
@@ -117,14 +124,18 @@
 
         square.onclick = () => {
           if (i === oddIndex) {
-            // Correct pick → increase difficulty
+            // Correct pick → play funny "boing"
+            soundCorrect.currentTime = 0;
+            soundCorrect.play();
             score++;
             scoreDisplay.textContent = score;
             if (size < 8) size++; // increase grid size up to 8x8
             if (colorDiff > 10) colorDiff -= 5; // make colors closer
             generateGrid();
           } else {
-            // Wrong pick → game over
+            // Wrong pick → play vine boom
+            soundWrong.currentTime = 0;
+            soundWrong.play();
             gameOver();
           }
         };
