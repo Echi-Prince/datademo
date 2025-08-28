@@ -31,9 +31,9 @@
       display: grid;
       gap: 5px;
       margin-bottom: 20px;
-      width: 90vw;   /* take most of the screen width */
+      width: 90vw;
       max-width: 500px;
-      aspect-ratio: 1 / 1; /* keep grid square */
+      aspect-ratio: 1 / 1;
     }
     .square {
       border-radius: 6px;
@@ -121,7 +121,6 @@
       grid.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
       grid.style.gridTemplateRows = `repeat(${size}, 1fr)`;
 
-      // pick a random base color
       const r = Math.floor(Math.random() * 200);
       const g = Math.floor(Math.random() * 200);
       const b = Math.floor(Math.random() * 200);
@@ -138,18 +137,19 @@
 
         square.onclick = () => {
           if (i === oddIndex) {
-            // Correct pick → sound + score + time
             soundCorrect.currentTime = 0;
             soundCorrect.play();
             score++;
             scoreDisplay.textContent = score;
-            timeLeft += 10; // add 10 seconds
+
+            // Add time, but cap at 30
+            timeLeft = Math.min(timeLeft + 10, 30);
             timerDisplay.textContent = timeLeft;
+
             if (size < 8) size++;
             if (colorDiff > 10) colorDiff -= 5;
             generateGrid();
           } else {
-            // Wrong pick → sound + game over
             soundWrong.currentTime = 0;
             soundWrong.play();
             gameOver();
@@ -176,7 +176,6 @@
       startGame();
     }
 
-    // Start automatically on load
     startGame();
   </script>
 </body>
