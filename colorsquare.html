@@ -14,36 +14,44 @@
       color: #fff;
       height: 100vh;
       margin: 0;
-      padding: 20px;
+      padding: 10px;
     }
     h1 {
-      margin-bottom: 10px;
+      margin: 10px 0;
+      text-align: center;
+      font-size: 1.5rem;
     }
     #stats {
       display: flex;
       gap: 20px;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
+      font-size: 1.2rem;
     }
     #grid {
       display: grid;
       gap: 5px;
       margin-bottom: 20px;
+      width: 90vw;   /* take most of the screen width */
+      max-width: 500px;
+      aspect-ratio: 1 / 1; /* keep grid square */
     }
     .square {
-      border-radius: 4px;
+      border-radius: 6px;
       cursor: pointer;
+      width: 100%;
+      height: 100%;
     }
     #game-over {
       display: none;
       text-align: center;
     }
     button {
-      padding: 8px 16px;
-      font-size: 16px;
+      padding: 12px 24px;
+      font-size: 1rem;
       margin-top: 10px;
       cursor: pointer;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       background: #00cc88;
       color: white;
     }
@@ -89,8 +97,8 @@
 
     function generateGrid() {
       grid.innerHTML = "";
-      grid.style.gridTemplateColumns = `repeat(${size}, 60px)`;
-      grid.style.gridTemplateRows = `repeat(${size}, 60px)`;
+      grid.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
+      grid.style.gridTemplateRows = `repeat(${size}, 1fr)`;
 
       // pick a random base color
       const r = Math.floor(Math.random() * 200);
@@ -105,8 +113,6 @@
       for (let i = 0; i < size * size; i++) {
         const square = document.createElement("div");
         square.classList.add("square");
-        square.style.width = "60px";
-        square.style.height = "60px";
         square.style.backgroundColor = i === oddIndex ? oddColor : baseColor;
 
         square.onclick = () => {
